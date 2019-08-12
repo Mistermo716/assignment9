@@ -2,7 +2,7 @@ require 'httparty'
 
 class CustomerClient
     include HTTParty
-    base_uri "http://localhost:8080"
+    base_uri "http://localhost:8081"
     format :json
     
     def self.newCustomer(cust)
