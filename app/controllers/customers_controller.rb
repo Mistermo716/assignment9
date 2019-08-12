@@ -1,4 +1,3 @@
-class CustomersController < ApplicationController
     #create POST /customers
     #request body contains customer data in JSON
     #lastName, firstName, email
