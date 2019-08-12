@@ -9,7 +9,7 @@ class OrdersController < ApplicationController
   # GET /orders/?customerId=1
   # GET /orders/?email=someone@email.com
   def index
-    #data = HTTParty.get("http://localhost:3000/customers.json")
+    #data = HTTParty.get("http://localhost:8081/customers.json")
     #p data.parsed_response[0]['email']
     if params[:customerId].present?
       @orders = Order.where("customerId": params[:customerId].to_i)
@@ -45,11 +45,12 @@ class OrdersController < ApplicationController
   # POST /orders
   # POST /orders.json
   def create
-      res = HTTParty.get("http://localhost:8081/customers/?id=#{order_params['customerid'].to_i}")
+      res = HTTParty.get("http://localhost:8081/customers/?email=#{order_params['email'].to_s}")
       codeCustomer = res.code
       dataCustomer = res.parsed_response
       p res
-      res = HTTParty.get("http://localhost:8082/items/#{order_params['itemid']}.json")
+      res = HTTParty.get("http://localhost:8082/items/#{order_params['itemid'].to_s}.json")
+      #res = HTTParty.get("http://localhost:8082/items/#{order_params['itemid'].to_s}.json")
       codeItem = res.code
       dataItem = res.parsed_response
       p dataItem
@@ -129,6 +130,6 @@ class OrdersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def order_params
-      params.require(:order).permit(:customerid, :itemid)
+      params.require(:order).permit(:itemid, :email)
     end
 end
