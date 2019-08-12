@@ -8,7 +8,7 @@
             @customer = Customer.new
             @customer.lastName = params[:lastName]
             @customer.firstName = params[:firstName]
-            @customer.email = params[:email].downcase
+            @customer.email = params[:email]
             @customer.award = 0
             @customer.lastOrder1 = 0
             @customer.lastOrder2 = 0
@@ -24,12 +24,8 @@
     #GET /customers?email=:email
     def get
         @customer = nil
-        if !params[:id].nil?
         @id = params[:id]
-        end
-        if !params[:email].nil?
-        @email = params[:email].downcase
-        end
+        @email = params[:email]
         if !@id.nil?
             @customer = Customer.find_by(id: @id)
         elsif !@email.nil?
@@ -44,16 +40,15 @@
     #PUT /customers/order
     #request contains order data -> params
     def processOrder
-        @id = params[:customerId].to_i
-        @award = params[:award].to_i
-        @total = params[:total].to_f
-        p @total
+        @id = params[:customerId]
+        @award = params[:award]
+        @total = params[:total]
         @customer = Customer.find_by(id: @id)
         if @award == 0
             @customer.lastOrder3 = @customer.lastOrder2
             @customer.lastOrder2 = @customer.lastOrder1
             @customer.lastOrder1 = @total
-            if @customer.lastOrder1 != 0.0 && @customer.lastOrder2 != 0.0 && @customer.lastOrder3 != 0.0 && @award == 0
+            if @customer.lastOrder1 != 0.0 && @customer.lastOrder2 != 0.0 && @customer.lastOrder3 != 0.0
                 @customer.award = (0.10 * (@customer.lastOrder1 + @customer.lastOrder2 + @customer.lastOrder3)/3.0).round(2)
             end
         else
@@ -63,8 +58,8 @@
             @customer.lastOrder2 = 0
             @customer.lastOrder3 = 0
         end
-        result = @customer.save
-        head 200
+        @customer.save
+        head 204
     end
     
     
