@@ -41,10 +41,12 @@ class CustomersController < ApplicationController
     #PUT /customers/order
     #request contains order data -> params
     def processOrder
-        @id = params[:customerId].to_i
-        @award = params[:award].to_i
+        @id = params[:customerid].to_i
+        @award = params[:award].to_f
         @total = params[:total].to_f
         @customer = Customer.find_by(id: @id)
+        p 'customer here: '
+        p @id
         if @award == 0
             @customer.lastOrder3 = @customer.lastOrder2
             @customer.lastOrder2 = @customer.lastOrder1
