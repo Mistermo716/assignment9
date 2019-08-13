@@ -45,6 +45,7 @@ class OrdersController < ApplicationController
   # POST /orders
   # POST /orders.json
   def create
+      p order_params['email']
       res = HTTParty.get("http://localhost:8081/customers/?email=#{order_params['email'].to_s}")
       codeCustomer = res.code
       dataCustomer = res.parsed_response
