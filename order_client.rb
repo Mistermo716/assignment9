@@ -2,7 +2,7 @@ require 'httparty'
 include HTTParty
 
 while true
-    puts "Do you want to: newOrder, retreive an existing order, register a new customer, custLookup, create a new item, itemLookup?"
+    puts "Do you want to: newOrder, retrieve an existing order, register a new customer, custLookup, create a new item, itemLookup?"
     user_input = gets.chomp
     case user_input
     
@@ -20,8 +20,8 @@ while true
             
             
         
-        when 'retreive'
-            puts "retreive by orderId, customerId, or email?"
+        when 'retrieve'
+            puts "retrieve by orderId, customerId, or email?"
             method = gets.chomp
             case method
                 when 'orderId'
@@ -32,14 +32,14 @@ while true
                     puts res.body
                 
                 when 'customerId'
-                    puts "Enter the order id"
+                    puts "Enter the customer id"
                     custData = gets.chomp!
                     res = HTTParty.get("http://localhost:8080/orders/?customerId=#{custData}")
                     puts "status #{res.code}"
                     puts res.body
                 
                 when 'email'
-                    puts "Enter the order id"
+                    puts "Enter the email"
                     custData = gets.chomp!
                     res = HTTParty.get("http://localhost:8080/orders/?email=#{custData}")
                     puts "status #{res.code}"
@@ -96,11 +96,16 @@ while true
         when 'itemLookup'
             puts "enter an item id number"
             custData = gets.chomp!
-            res = HTTParty.get("http://localhost:8080/orders?id=#{custData}")
+            res = HTTParty.get("http://localhost:8082/items?id=#{custData}")
             puts "status #{res.code}"
-            puts res.body
+            puts res
         
         when 'quit'
-            break
+            res = HTTParty.get("http://localhost:8081/customers/?email=rtashiro-evans@csumb.edu")
+            codeCustomer = res.code
+            dataCustomer = res
+            dataCustomer = res.parsed_response
+            p codeCustomer
+            #break
     end
 end

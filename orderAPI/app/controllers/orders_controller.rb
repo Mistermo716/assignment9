@@ -60,7 +60,8 @@ class OrdersController < ApplicationController
         newParams["price"] = dataItem["price"]
         newParams["total"] = dataItem["price"] - dataCustomer["award"]
         p newParams
-        HTTParty.put("http://localhost:8081/customers/order?award=#{newParams['award']}&total=#{newParams["total"]}&customerId=#{newParams['customerid']}")
+    
+        #HTTParty.put("http://localhost:8081/customers/order?award=#{newParams['award']}&total=#{newParams["total"]}&customerId=#{newParams['customerid']}")
       end
       if codeCustomer == 404 || codeItem == 404
         if codeCustomer == 404 and codeItem == 404
@@ -77,19 +78,25 @@ class OrdersController < ApplicationController
         end
       else
         @order = Order.new
-        @order.customerid = order_params[:customerid]
+        @order.customerid = dataCustomer["id"]
         @order.email = dataCustomer["email"]
         @order.itemid = order_params[:itemid]
         @order.description = dataItem["description"]
         @order.award = newParams["award"]
         @order.total = newParams["total"]
         @order.price = newParams["price"]
+        
+        orderResult = HTTParty.put('http://localhost:8081/customers/order', 
+                :body => @order.to_json,
+                :headers => {'Content-Type' => 'application/json', 'ACCEPT' => 'application/json'}
+        )
 
   
       respond_to do |format|
         if @order.save
           format.html { redirect_to @order, notice: 'Order was successfully created.' }
           format.json { render :show, status: :created, location: @order }
+          
         else
           format.html { render :new }
           format.json { render json: @order.errors, status: :unprocessable_entity }
