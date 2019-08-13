@@ -45,14 +45,19 @@ class ItemsController < ApplicationController
   # PATCH/PUT /items/1
   # PATCH/PUT /items/1.json
   def update
+    @id = params['id'].to_i
+    @stockQty = params['stockQty'].to_i
+    @description = params['description']
+    @price = params['price'].to_f
     respond_to do |format|
-      if @item.update(item_params)
-        format.html { redirect_to @item, notice: 'Item was successfully updated.' }
-        format.json { render :show, status: :ok, location: @item }
-      else
-        format.html { render :edit }
-        format.json { render json: @item.errors, status: :unprocessable_entity }
-      end
+      Item.find(@id).update(stockQty:@stockQty, description: @description, price: @price )
+      # if @item.update(@id,stockQty: @stockQty)
+      #   format.html { redirect_to @item, notice: 'Item was successfully updated.' }
+      #   format.json { render :show, status: :ok, location: @item }
+      # else
+      #   format.html { render :edit }
+      #   format.json { render json: @item.errors, status: :unprocessable_entity }
+      # end
     end
   end
 
@@ -70,10 +75,5 @@ class ItemsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_item
       @item = Item.find(params[:id])
-    end
-
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def item_params
-      params.require(:item).permit(:price, :description, :stockQty)
     end
 end

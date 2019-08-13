@@ -11,7 +11,7 @@ if input[0] == 'c'
     puts 'Enter Quantity: '
     quantity = gets.chomp.to_i
     item = {description: description, price: price, stockQty: quantity}
-    result = HTTParty.post('http://localhost:3000/items', 
+    result = HTTParty.post('http://localhost:8082/items', 
                 :body => item.to_json,
                 :headers => {'Content-Type' => 'application/json', 'ACCEPT' => 'application/json'}
     )
@@ -29,10 +29,7 @@ price = gets.chomp.to_f
 puts 'enter quantity'
 quantity = gets.chomp.to_i
 item = {description: description, price: price, stockQty: quantity}
-result = HTTParty.patch("http://localhost:3000/items/#{id}", 
-    :body => item.to_json,
-    :headers => {'Content-Type' => 'application/json', 'ACCEPT' => 'application/json'}
-)
+result = HTTParty.put("http://localhost:8082/items/#{id}?stockQty=#{quantity}&description=#{description}&price=#{price}&id=#{id}")
 p "status code #{result.code}"
 p result.body
 end
@@ -40,7 +37,7 @@ end
 if input[0] == 'g'
     puts 'Enter id of item'
     id = gets.chomp.to_i
-    result = HTTParty.get("http://localhost:3000/items/#{id}.json")
+    result = HTTParty.get("http://localhost:8082/items/#{id}.json")
     p "status code #{result.code}"
     p result.body
 end
