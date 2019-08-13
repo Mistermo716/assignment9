@@ -45,8 +45,6 @@ class CustomersController < ApplicationController
         @award = params[:award].to_f
         @total = params[:total].to_f
         @customer = Customer.find_by(id: @id)
-        p 'customer here: '
-        p @id
         if @award == 0
             @customer.lastOrder3 = @customer.lastOrder2
             @customer.lastOrder2 = @customer.lastOrder1
