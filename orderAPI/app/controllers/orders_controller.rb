@@ -45,7 +45,6 @@ class OrdersController < ApplicationController
   # POST /orders
   # POST /orders.json
   def create
-      p order_params['email']
       res = HTTParty.get("http://localhost:8081/customers/?email=#{order_params['email'].to_s}")
       codeCustomer = res.code
       dataCustomer = res.parsed_response
@@ -92,7 +91,8 @@ class OrdersController < ApplicationController
                 :headers => {'Content-Type' => 'application/json', 'ACCEPT' => 'application/json'}
         )
 
-  
+        res = HTTParty.put("http://localhost:8082/items/#{order_params[:itemid]}?stockQty=#{dataItem['stockQty']-1}&description=#{dataItem['description']}&price=#{dataItem['price']}&id=#{order_params[:id]}")
+        p res
       respond_to do |format|
         if @order.save
           format.html { redirect_to @order, notice: 'Order was successfully created.' }
